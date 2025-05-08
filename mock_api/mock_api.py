@@ -2,14 +2,22 @@ from fastapi import FastAPI
 import pandas as pd
 
 # Load dataset
-DATASET_PATH = "/Order_Data_Dataset.csv"
-df = pd.read_csv(DATASET_PATH)
+DATASET_PATH = "../new_data/Order_Data_Dataset.csv"
+df = pd.read_csv(DATASET_PATH, low_memory=False)
 
 # Initialize FastAPI app
 app = FastAPI(title="E-commerce Dataset API", description="API for querying e-commerce sales data")
 
 # Clean data (e.g., handle NaN values) at the start
-df.fillna(value="", inplace=True)
+# df.fillna(value="", inplace=True)
+# Clean data - handle NaN values by data type
+# Fill numeric columns with appropriate values
+numeric_cols = df.select_dtypes(include=['number']).columns
+df[numeric_cols] = df[numeric_cols].fillna(0)
+
+# Fill string/object columns with empty strings
+object_cols = df.select_dtypes(include=['object']).columns
+df[object_cols] = df[object_cols].fillna("")
 
 # Endpoint to get all data
 @app.get("/data")
