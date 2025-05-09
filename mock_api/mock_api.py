@@ -19,6 +19,11 @@ df[numeric_cols] = df[numeric_cols].fillna(0)
 object_cols = df.select_dtypes(include=['object']).columns
 df[object_cols] = df[object_cols].fillna("")
 
+@app.get("/")
+def read_root():
+    """Root endpoint."""
+    return {"message": "Mock API", "status": "running"}
+
 # Endpoint to get all data
 @app.get("/data")
 def get_all_data():

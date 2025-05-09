@@ -44,28 +44,38 @@ class ProductVectorStore:
 
         # Create a copy to avoid modifying the original
         processed_df = df.copy()
-        
+
+        # Columns names to check for duplicates.
+        columns_to_check = processed_df.columns 
+
         # Generate product IDs if they don't exist
         if "product_id" not in processed_df.columns:
             processed_df["product_id"] = processed_df.index
 
-        # Check for duplicate titles and remove duplicates
-        duplicate_count = processed_df.duplicated(subset = ['title'], keep = 'first').sum()
+        # Check for completely duplicate rows (all columns match)
+        # This ensures we only remove exact duplicates, not just rows with the same title
+        original_count = len(processed_df)
+
+        # Drop exact duplicates
+        processed_df = processed_df.drop_duplicates(subset=columns_to_check, keep='first')
+
+        # Report how many duplicates were found
+        duplicate_count = original_count - len(processed_df)
         if duplicate_count > 0:
-            print(f"Found {duplicate_count} duplicate products - keeping only first occurrences")
-            processed_df = processed_df.drop_duplicates(subset = ['title'], keep = 'first')
-        
+            print(f"Found and removed {duplicate_count} exact duplicate products (all attributes match)")
+            processed_df = processed_df.reset_index(drop=True)
+
         # Fill missing values in text fields
         text_columns = ['title', 'description', 'features', 'categories', 'details']
         for col in text_columns:
             if col in processed_df.columns:
                 processed_df[col] = processed_df[col].fillna('')
-        
+
         # Normalize text - lowercase, remove extra whitespace
         for col in text_columns:
             if col in processed_df.columns:
                 processed_df[col] = processed_df[col].str.lower().str.strip()
-        
+
         # Store processed dataframe
         self.product_df = processed_df
         self.product_ids = processed_df['product_id'].tolist()
@@ -81,6 +91,7 @@ class ProductVectorStore:
             print("No data available for embedding generation")
             return None
         
+        # main_category,title,average_rating,rating_number,features,description,price,store,categories,details,parent_asin,imputed_columns
         # Get all text columns 
         text_columns = ['main_category', 'title', 'features', 'description', 'categories', 'details']
         
@@ -101,6 +112,9 @@ class ProductVectorStore:
             
             if 'price' in row and not pd.isna(row['price']):
                 text_parts.append(f"price: {row['price']}")
+
+            if 'store' in row and not pd.isna(row['store']):
+                text_parts.append(f"store: {row['store']}")
     
             if ('imputed_columns' in row and row['imputed_columns'] != None and row['imputed_columns']!= []):
                 text_parts.append(f"imputed_columns: {row['imputed_columns']}")
@@ -284,7 +298,7 @@ class ProductVectorStore:
             List of dictionaries containing product information
         """
         # First get more results than we need
-        results = self.search(query, top_k=top_k*3)
+        results = self.search(query, top_k)
         
         # Filter by category
         filtered_results = []
@@ -294,7 +308,7 @@ class ProductVectorStore:
 
         
         # Return the top k results
-        return filtered_results[:top_k]
+        return filtered_results
 
     def get_product_by_id(self, product_id):
         """
