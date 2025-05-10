@@ -23,8 +23,8 @@ app.add_middleware(
 )
 
 # Initialize API client
-MOCK_API_URL = os.environ.get("MOCK_API_URL", "http://localhost:8001")
-api_client = OrderApiClient(base_url=MOCK_API_URL)
+MOCK_API_URL = os.environ.get("MOCK_API_URL","http://localhost:8000")
+api_client = OrderApiClient(base_url="http://localhost:8000")
 
 @app.get("/")
 def read_root():

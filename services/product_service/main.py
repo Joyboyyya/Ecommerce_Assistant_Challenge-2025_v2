@@ -12,6 +12,8 @@ from vector_store import ProductVectorStore
 from models import ProductSearchResponse, ProductCategoryResponse
 from utils import format_product_results, get_top_rated_products
 
+# print(f"Product_URL: {os.environ.get(r'PRODUCT_SERVICE_URL')}")
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Product Search Service",
@@ -146,4 +148,4 @@ def get_product(product_id: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

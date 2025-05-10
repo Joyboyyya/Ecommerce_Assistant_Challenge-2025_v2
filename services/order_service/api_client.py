@@ -2,6 +2,29 @@ import requests
 import pandas as pd
 from typing import List, Dict, Any, Optional, Union
 import logging
+import os
+import dotenv
+from dotenv import load_dotenv
+from pathlib import Path
+import logging
+
+# Load environment variables from .env file
+# Use relative path from the current file
+# current_dir = Path(__file__).resolve().parent
+# project_root = current_dir.parent.parent  # Go up two levels to project root
+# dotenv_path = project_root / ".env"
+
+# # Load .env file if it exists
+# if dotenv_path.exists():
+#     load_dotenv(dotenv_path=str(dotenv_path))
+# else:
+#     # Fall back to trying a .env in the current directory
+#     load_dotenv()
+
+# raw = os.environ.get("MOCK_API_URL")
+# logger = logging.getLogger("your_module_name")
+# logger.debug("RAW os.environ['MOCK_API_URL']: %r", raw)
+# assert raw == "http://localhost:8000", "Env var was not read correctly!"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -10,8 +33,9 @@ logger = logging.getLogger(__name__)
 class OrderApiClient:
     """Client for interacting with the order mock API."""
     
-    def __init__(self, base_url: str = "http://localhost:8001"):
+    def __init__(self, base_url: str = "http://localhost:8000"):
         """Initialize with API base URL."""
+        # base_url = "http://localhost:8000"
         self.base_url = base_url
         logger.info(f"Initialized OrderApiClient with base URL: {base_url}")
     
