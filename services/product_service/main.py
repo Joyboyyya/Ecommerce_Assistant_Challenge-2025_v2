@@ -133,19 +133,6 @@ def top_rated_products(
         "count": len(formatted_results)
     }
 
-@app.get("/product/{product_id}")
-def get_product(product_id: int):
-    """Get product details by ID."""
-    product = vector_store.get_product_by_id(product_id)
-    
-    if not product:
-        raise HTTPException(status_code=404, detail=f"Product with ID {product_id} not found")
-    
-    # Format product
-    formatted_product = format_product_results([product])[0]
-    
-    return formatted_product
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

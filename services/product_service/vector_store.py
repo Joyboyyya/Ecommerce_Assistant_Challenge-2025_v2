@@ -48,9 +48,6 @@ class ProductVectorStore:
         # Columns names to check for duplicates.
         columns_to_check = processed_df.columns 
 
-        # Generate product IDs if they don't exist
-        if "product_id" not in processed_df.columns:
-            processed_df["product_id"] = processed_df.index
 
         # Check for completely duplicate rows (all columns match)
         # This ensures we only remove exact duplicates, not just rows with the same title
@@ -78,7 +75,6 @@ class ProductVectorStore:
 
         # Store processed dataframe
         self.product_df = processed_df
-        self.product_ids = processed_df['product_id'].tolist()
 
         return processed_df
 
@@ -225,12 +221,6 @@ class ProductVectorStore:
             # Load the product dataframe
             self.product_df = pd.read_pickle(data_path)
 
-            # Recreate product_ids
-            if 'product_id' in self.product_df.columns:
-                self.product_ids = self.product_df['product_id'].tolist()
-            else:
-                self.product_ids = list(range(len(self.product_df)))
-
             print(f"Loaded index with {self.index.ntotal} vectors")
             print(f"Loaded {len(self.product_df)} products")
             return True
@@ -309,35 +299,3 @@ class ProductVectorStore:
         
         # Return the top k results
         return filtered_results
-
-    def get_product_by_id(self, product_id):
-        """
-        Retrieve product details by ID.
-
-        Args:
-            product_id: ID of the product to retrieve
-
-        Returns:
-            Dictionary containing product information, or None if not found
-        """
-        # Check if we have product data
-        if self.product_df is None: 
-            print("No product data available.")
-            return None
-
-        try:
-            # Find the product by ID
-            if 'product_id' in self.product_df.columns:
-                product = self.product_df[self.product_df['product_id'] == product_id]
-
-                # If product found, return it as a dictionary
-                if not product.empty:
-                    return product.iloc[0].to_dict()
-
-            # If we reach here, the product wasn't found
-            print(f"Product with ID {product_id} not found.")
-            return None
-
-        except Exception as e:
-            print(f"Error retrieving product: {e}")
-            return None

@@ -155,7 +155,7 @@ class OrderApiClient:
                 if 'Order_Date' in df.columns:
                     df['Order_Date'] = pd.to_datetime(df['Order_Date'])
                     # Sort by date (most oldest first)
-                    df = df.sort_values(['Order_Date','Time'], ascending=[True,True])
+                    df = df.sort_values(['Order_Date','Time'], ascending=[False,False])
                     # Convert datetime back to string for JSON serialization
                     df['Order_Date'] = df['Order_Date'].dt.strftime('%Y-%m-%d')
 
