@@ -8,9 +8,13 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# # Service endpoints (can also be set via environment variables)
+# PRODUCT_SERVICE_URL = os.getenv("PRODUCT_SERVICE_URL", "http://localhost:8001")
+# ORDER_SERVICE_URL   = os.getenv("ORDER_SERVICE_URL",   "http://localhost:8002")
+
 # Service endpoints (can also be set via environment variables)
-PRODUCT_SERVICE_URL = os.getenv("PRODUCT_SERVICE_URL", "http://localhost:8001")
-ORDER_SERVICE_URL   = os.getenv("ORDER_SERVICE_URL",   "http://localhost:8002")
+PRODUCT_SERVICE_URL = "http://localhost:8001"
+ORDER_SERVICE_URL   = "http://localhost:8002"
 
 # ==========================================
 # Product Service Tools

@@ -41,41 +41,44 @@ class ProductVectorStore:
         """Preprocess product data for embedding generation."""
         if df is None: 
             df = self.product_df
-
+    
         # Create a copy to avoid modifying the original
         processed_df = df.copy()
-
-        # Columns names to check for duplicates.
-        columns_to_check = processed_df.columns 
-
-
-        # Check for completely duplicate rows (all columns match)
-        # This ensures we only remove exact duplicates, not just rows with the same title
-        original_count = len(processed_df)
-
-        # Drop exact duplicates
-        processed_df = processed_df.drop_duplicates(subset=columns_to_check, keep='first')
-
-        # Report how many duplicates were found
-        duplicate_count = original_count - len(processed_df)
-        if duplicate_count > 0:
-            print(f"Found and removed {duplicate_count} exact duplicate products (all attributes match)")
-            processed_df = processed_df.reset_index(drop=True)
-
+        
+        # Generate product IDs if they don't exist
+        if "product_id" not in processed_df.columns:
+            processed_df["product_id"] = processed_df.index
+    
+        # Check for duplicate titles but only consider non-empty titles
+        # This prevents rows with empty titles from being treated as duplicates
+        non_empty_mask = (processed_df['title'].notna()) & (processed_df['title'] != '') & (processed_df['title'] != '[]')
+        
+        # Count actual duplicates (only for non-empty titles)
+        if 'title' in processed_df.columns:
+            duplicate_titles = processed_df[non_empty_mask].duplicated(subset=['title'], keep='first').sum()
+            if duplicate_titles > 0:
+                print(f"Found {duplicate_titles} duplicate products with non-empty titles - keeping only first occurrences")
+                
+                # Create a mask of rows to keep
+                # Keep all rows with empty titles, and first occurrence of non-empty titles
+                keep_mask = ~(non_empty_mask & processed_df.duplicated(subset=['title'], keep='first'))
+                processed_df = processed_df[keep_mask].reset_index(drop=True)
+        
         # Fill missing values in text fields
         text_columns = ['title', 'description', 'features', 'categories', 'details']
         for col in text_columns:
             if col in processed_df.columns:
                 processed_df[col] = processed_df[col].fillna('')
-
+        
         # Normalize text - lowercase, remove extra whitespace
         for col in text_columns:
             if col in processed_df.columns:
                 processed_df[col] = processed_df[col].str.lower().str.strip()
-
+        
         # Store processed dataframe
         self.product_df = processed_df
-
+        self.product_ids = processed_df['product_id'].tolist()
+    
         return processed_df
 
     

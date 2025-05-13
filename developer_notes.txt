@@ -1,0 +1,5 @@
+# To start a new tmux session
+tmux new -s ecommerce
+
+# To open an existing tmux session
+tmux attach -t ecommerce

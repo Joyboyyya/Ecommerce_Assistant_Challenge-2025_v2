@@ -1,28 +1,44 @@
 import pandas as pd
 from typing import List, Dict, Any, Optional
 
+
+import pandas as pd
+import numpy as np
+
 def format_product_results(products: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Format product results for API response."""
     formatted_results = []
-    
+
     for product in products:
-        # Format price to two decimal places
-        if 'price' in product and product['price'] is not None:
-            product['price'] = round(float(product['price']), 2)
-            
-        # Format rating to one decimal place
-        if 'average_rating' in product and product['average_rating'] is not None:
-            product['average_rating'] = round(float(product['average_rating']), 1)
-            
-        # Clean up features text if present
-        if 'features' in product and product['features']:
-            # Split by newlines if necessary
-            if isinstance(product['features'], str) and '\n' in product['features']:
-                product['features'] = [f.strip() for f in product['features'].split('\n') if f.strip()]
-        
-        formatted_results.append(product)
-        
+        # Format price
+        price = product.get('price')
+        if price is not None and not pd.isna(price):
+            product['price'] = round(float(price), 2)
+        else:
+            product['price'] = None
+
+        # Format rating
+        rating = product.get('average_rating')
+        if rating is not None and not pd.isna(rating):
+            product['average_rating'] = round(float(rating), 1)
+        else:
+            product['average_rating'] = None
+
+        # Clean features
+        if 'features' in product and isinstance(product['features'], str) and '\n' in product['features']:
+            product['features'] = [f.strip() for f in product['features'].split('\n') if f.strip()]
+
+        # ✅ Replace any remaining NaN/inf in the entire dict
+        cleaned_product = {
+            k: (None if isinstance(v, float) and (pd.isna(v) or np.isinf(v)) else v)
+            for k, v in product.items()
+        }
+
+        formatted_results.append(cleaned_product)
+
     return formatted_results
+
+
 
 def get_top_rated_products(df: pd.DataFrame, category: Optional[str] = None, 
                           min_rating: float = 4.5, top_k: int = 5) -> List[Dict[str, Any]]:
