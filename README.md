@@ -42,7 +42,9 @@ Each service is deployed independently and communicates via RESTful APIs. The ar
 The Chat Service is the main interface for users to interact with the chatbot. It routes user queries to the appropriate backend services and integrates a large language model (Cohere) with RAG capabilities.
 
 The Graph compiled to this project is simple yet powerful.
-![alt text](image.png)
+
+
+<p align="center"><img src="image.png" alt="alt text"></p>
 
 **Key Features:**
 - Gradio UI for easy interaction
