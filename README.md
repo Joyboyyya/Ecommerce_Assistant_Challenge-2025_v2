@@ -16,6 +16,7 @@ Welcome to the E-Commerce Expert Assistant! This project implements a chatbot th
 - [API Documentation](#api-documentation)
 - [Development Process](#development-process)
 - [Versioning](#versioning)
+- [Future Work](#future-work)
 
 ## Architecture Overview
 
