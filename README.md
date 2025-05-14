@@ -189,7 +189,7 @@ curl -X POST http://localhost:8003/chat \
 
 ## Deployment
 
-I have deployed my project in AWS EC2 instance. I have included all the link which are temporary as long as I keep the EC2 Instance in the cloud.
+I have deployed my project in AWS EC2 instance. I have included all the links which will be active as long as I keep up the EC2 Instance in the cloud.
 
 | Service             | URL                                                                  |
 | ------------------- | -------------------------------------------------------------------- |
@@ -369,3 +369,22 @@ The project uses Git tags to mark important milestones in development:
 - v0.5: Chat Service with basic LLM integration & UI implementation with Gradio
 - v0.6: Deployment & Integration of all services
 - v1.0: Complete system with documentation
+
+## Future Work
+
+Several enhancements are planned for future iterations of this project:
+
+1. **Agent Flow Tracking**: Implement Langsmith or PhoenixAI for better visualization and tracking of agent workflows and decision-making processes.
+
+2. **RAG and Agent Evaluation**: Develop robust evaluation frameworks to measure:
+   - Tool selection accuracy (whether agents are calling the appropriate tools)
+   - Retrieval precision and recall metrics
+   - Overall response quality and relevance
+
+3. **MCP Server Implementation**: Develop Model Control Protocol servers for both product and order services to use with development environments like Cursor AI or Windsurf for improved efficiency.
+
+4. **Hallucination Reduction**: Currently, the system implements parallel requests and selects the first best response to mitigate hallucination issues. Future work will focus on more sophisticated techniques to reduce this inefficiency.
+
+5. **Enhanced UI**: Develop a custom user interface with additional features for a better user experience.
+
+6. **Additional Data Sources**: Integrate with more data sources to expand the chatbot's knowledge base and capabilities.
