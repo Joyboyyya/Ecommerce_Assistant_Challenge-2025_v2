@@ -6,6 +6,6 @@ Story,Task,Estimate min (hr),Estimate max (hr),Actual,Comment
 ,Chat Service Integration,5,6,72, Took me more time than expected (Bcoz of I was experimenting few frameworks)
 ,Testing + Sample Q&A,2,4,5,
 ,Deployment,3,6,10,
-,Docs & Versioning,2,3,,
+,Docs & Versioning,2,3,1,
 ,Bonus UI & Improvements,4,5,6,
-,Total,26,38,,
+,Total,26,38,110, 
