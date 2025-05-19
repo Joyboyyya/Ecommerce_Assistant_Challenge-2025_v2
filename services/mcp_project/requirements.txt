@@ -1,0 +1,32 @@
+# Web framework
+fastapi
+uvicorn
+
+# LLM and tool integrations
+cohere
+langchain
+langchain-cohere
+langchain-core
+langgraph
+langgraph-checkpoint
+langgraph-prebuilt
+langgraph-sdk
+
+# UI
+gradio
+
+# Vector search
+sentence-transformers
+faiss-cpu
+
+# Data processing
+pandas
+numpy
+
+# Environment & utils
+python-dotenv
+requests
+
+# Optional extras (if used in formatting/visualization/debugging)
+pydantic
+rich
